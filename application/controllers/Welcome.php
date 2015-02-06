@@ -32,7 +32,7 @@ class Welcome extends Application {
             $this1 = array(
                 'num' => $order->num,
                 'datetime' => $order->date,
-                'amount' => $order->total
+                'amount' => sprintf("$%0.2f", $order->total)
             );
             $orders[] = $this1;
         }

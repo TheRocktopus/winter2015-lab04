@@ -9,6 +9,7 @@
  *
  * ------------------------------------------------------------------------
  */
+ 
 class Order extends Application {
 
 	function __construct() {
@@ -18,7 +19,7 @@ class Order extends Application {
     // start a new order
     function neworder() {
         
-		date_default_timezone_set('Canada/Pacific');
+		date_default_timezone_set('America/Los_Angeles');
 		
 		$order_num = $this->orders->highest() + 1;
 		$new_order = $this->orders->create();
@@ -94,20 +95,52 @@ class Order extends Application {
         $this->data['title'] = 'Checking Out';
         $this->data['pagebody'] = 'show_order';
         $this->data['order_num'] = $order_num;
-        //FIXME
+		$this->data['proceed_link'] = "";
+		$this->data['proceed_warning'] = "";
+        
+		$order = $this->orders->get($order_num);
+		$this->data['total'] = sprintf("$%0.2f", $order->total);	
+		$this->data['items'] = $this->orders->details($order_num);		
+		$validated = $this->orders->validate($order_num);
+		
+		if(!$validated)
+		{
+			$this->data['okornot'] = "disabled";
+			$this->data['proceed_warning'] = "You must order one item in" .
+				" each of the categories on the previous page to proceed";
+		}
+		else
+		{
+			$this->data['proceed_link'] = "/order/proceed/" . $order_num;
+		}
+		
 
         $this->render();
     }
 
     // proceed with checkout
     function proceed($order_num) {
-        //FIXME
+        
+		$order = $this->orders->get($order_num);
+		$order->status = "c";
+		$order->date = date('Y-m-d H:i:s'); // set date to now
+		
+		$this->orders->update($order);
+		
         redirect('/');
     }
 
     // cancel the order
     function cancel($order_num) {
-        //FIXME
+        
+		$order = $this->orders->get($order_num);
+		$order->status = "x";
+		$order->date = date('Y-m-d H:i:s'); // set date to now
+		
+		$this->orders->update($order);
+		
+		$this->orders->flush($order_num);
+		
         redirect('/');
     }
 

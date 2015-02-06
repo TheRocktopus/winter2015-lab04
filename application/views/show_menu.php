@@ -5,6 +5,7 @@
 
 <div class="row text-center">
     <div class="span3">
+		<h4>Meals</h4>
         {meals}
         <a href="/order/add/{order_num}/{code}">
             <img src="/assets/images/{picture}" title="{description}"/>            
@@ -13,6 +14,7 @@
         {/meals}
     </div>
     <div class="span3 offset1">
+		<h4>Drinks</h4>
         {drinks}
         <a href="/order/add/{order_num}/{code}">
             <img src="/assets/images/{picture}" title="{description}"/>            
@@ -21,6 +23,7 @@
         {/drinks}
     </div>
     <div class="span3 offset1">
+		<h4>Sweets</h4>
         {sweets}
         <a href="/order/add/{order_num}/{code}">
             <img src="/assets/images/{picture}" title="{description}"/>            
